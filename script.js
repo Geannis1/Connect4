@@ -4,8 +4,7 @@ let display = document.getElementById("display");
 let turn = 0;
 let yellow = 0;
 let red = 0;
-cells.forEach(cell => {
-    cell.addEventListener('click', function() {
+function check(cell) {
         clearDisplay();
         if(turn === 0 && cell.getAttribute('value') == "") {
           cell.style.backgroundColor = 'yellow';
@@ -19,70 +18,7 @@ cells.forEach(cell => {
         checkVertically();
         checkHorizontally();
         checkDiagonal();
-    });
-});
-
-function checkVertically() {
-    yellow = 0;
-    red = 0;
-    for(let j = 0; j <= 6; ++j) {
-        for(let i = 5; i >= 0; --i) {
-            if(table.rows[i].cells[j].getAttribute('value') === "yellow") {
-                red = 0;
-                ++yellow;
-                if(yellow === 4) {
-                    display.innerHTML = "Yellow is our winner";
-                    clearCells();
-                    turn = 0;
-                    break;
-                }
-            } else if (table.rows[i].cells[j].getAttribute('value') === "red") {
-                yellow = 0;
-                ++red;
-                if(red === 4) {
-                    display.innerHTML = "Red is our winner";
-                    clearCells();
-                    turn = 0;
-                    break;
-                }
-            } else if(table.rows[i].cells[j].getAttribute('value') === "") {
-                yellow = 0;
-                red = 0;
-            }
-        }
     }
-}
-
-function checkHorizontally() {
-    yellow = 0;
-    red = 0;
-    for(let i = 5; i >= 0; --i) {
-        for(let j = 0; j <= 6; ++j) {
-            if(table.rows[i].cells[j].getAttribute('value') === "yellow") {
-                red = 0;
-                ++yellow;
-                if(yellow === 4) {
-                    display.innerHTML = "Yellow is our winner";
-                    clearCells();
-                    turn = 0;
-                    break;
-                }
-            } else if (table.rows[i].cells[j].getAttribute('value') === "red") {
-                yellow = 0;
-                ++red;
-                if(red === 4) {
-                    display.innerHTML = "Red is our winner";
-                    clearCells();
-                    turn = 0;
-                    break;
-                }
-            } else if(table.rows[i].cells[j].getAttribute('value') === "") {
-                yellow = 0;
-                red = 0;
-            }
-        }
-    }
-}
 
 function clearCells() {
     for(let j = 0; j <= 6; ++j) {
@@ -97,6 +33,52 @@ function clearDisplay() {
     display.innerHTML = "";
 }
 
+function checkCell(i, j) {
+    this.i = i;
+    this.j = j;
+    if(table.rows[i].cells[j].getAttribute('value') === "yellow") {
+        red = 0;
+        ++yellow;
+        if(yellow === 4) {
+            display.innerHTML = "Yellow is our winner";
+            clearCells();
+            turn = 0;
+        }
+    } else if (table.rows[i].cells[j].getAttribute('value') === "red") {
+        yellow = 0;
+        ++red;
+        if(red === 4) {
+            display.innerHTML = "Red is our winner";
+            clearCells();
+            turn = 0;
+        }
+    } else if(table.rows[i].cells[j].getAttribute('value') === "") {
+        yellow = 0;
+        red = 0;
+    }
+}
+
+function checkVertically() {
+    yellow = 0;
+    red = 0;
+    for(let j = 0; j <= 6; ++j) {
+        for(let i = 5; i >= 0; --i) {
+           checkCell(i,j);
+        }
+    }
+}
+
+function checkHorizontally() {
+    yellow = 0;
+    red = 0;
+    for(let i = 5; i >= 0; --i) {
+        for(let j = 0; j <= 6; ++j) {
+            checkCell(i,j);
+        }
+    }
+}
+
+
 function checkDiagonal() {
     yellow = 0;
     red = 0;
@@ -104,28 +86,7 @@ function checkDiagonal() {
         let linie = i;
         let coloana = 0;
         while(linie <= 5 && coloana <= 6) {
-            if(table.rows[linie].cells[coloana].getAttribute('value') === "yellow") {
-                red = 0;
-                ++yellow;
-                if(yellow === 4) {
-                    display.innerHTML = "Yellow is our winner";
-                    clearCells();
-                    turn = 0;
-                    break;
-                }
-            } else if (table.rows[linie].cells[coloana].getAttribute('value') === "red") {
-                yellow = 0;
-                ++red;
-                if(red === 4) {
-                    display.innerHTML = "Red is our winner";
-                    clearCells();
-                    turn = 0;
-                    break;
-                }
-            } else if(table.rows[linie].cells[coloana].getAttribute('value') === "") {
-                yellow = 0;
-                red = 0;
-            }
+            checkCell(linie, coloana);
             ++linie;
             ++coloana;
         }
@@ -136,28 +97,7 @@ function checkDiagonal() {
         let linie = 0;
         let coloana = j;
         while(linie <= 5 && coloana <= 6) {
-            if(table.rows[linie].cells[coloana].getAttribute('value') === "yellow") {
-                red = 0;
-                ++yellow;
-                if(yellow === 4) {
-                    display.innerHTML = "Yellow is our winner";
-                    clearCells();
-                    turn = 0;
-                    break;
-                }
-            } else if (table.rows[linie].cells[coloana].getAttribute('value') === "red") {
-                yellow = 0;
-                ++red;
-                if(red === 4) {
-                    display.innerHTML = "Red is our winner";
-                    clearCells();
-                    turn = 0;
-                    break;
-                }
-            } else if(table.rows[linie].cells[coloana].getAttribute('value') === "") {
-                yellow = 0;
-                red = 0;
-            }
+            checkCell(linie, coloana);
             ++linie;
             ++coloana;
         }
@@ -168,28 +108,7 @@ function checkDiagonal() {
         let linie = 0;
         let coloana = j;
         while(linie <= 5 && coloana >= 0) {
-            if(table.rows[linie].cells[coloana].getAttribute('value') === "yellow") {
-                red = 0;
-                ++yellow;
-                if(yellow === 4) {
-                    display.innerHTML = "Yellow is our winner";
-                    clearCells();
-                    turn = 0;
-                    break;
-                }
-            } else if (table.rows[linie].cells[coloana].getAttribute('value') === "red") {
-                yellow = 0;
-                ++red;
-                if(red === 4) {
-                    display.innerHTML = "Red is our winner";
-                    clearCells();
-                    turn = 0;
-                    break;
-                }
-            } else if(table.rows[linie].cells[coloana].getAttribute('value') === "") {
-                yellow = 0;
-                red = 0;
-            }
+            checkCell(linie, coloana);
             ++linie;
             --coloana;
         }
@@ -200,28 +119,7 @@ function checkDiagonal() {
         let linie = i;
         let coloana = 6;
         while(linie <= 5 && coloana >= 0) {
-            if(table.rows[linie].cells[coloana].getAttribute('value') === "yellow") {
-                red = 0;
-                ++yellow;
-                if(yellow === 4) {
-                    display.innerHTML = "Yellow is our winner";
-                    clearCells();
-                    turn = 0;
-                    break;
-                }
-            } else if (table.rows[linie].cells[coloana].getAttribute('value') === "red") {
-                yellow = 0;
-                ++red;
-                if(red === 4) {
-                    display.innerHTML = "Red is our winner";
-                    clearCells();
-                    turn = 0;
-                    break;
-                }
-            } else if(table.rows[linie].cells[coloana].getAttribute('value') === "") {
-                yellow = 0;
-                red = 0;
-            }
+            checkCell(linie, coloana);
             ++linie;
             --coloana;
         }
